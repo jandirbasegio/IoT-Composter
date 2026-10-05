@@ -1,0 +1,21 @@
+USE db_composteira;
+
+CREATE TABLE IF NOT EXISTS ciclos_compostagem (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  status ENUM('ENCHIMENTO', 'ATIVA', 'MATURACAO') NOT NULL DEFAULT 'ENCHIMENTO',
+  data_inicio TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  data_fechamento TIMESTAMP NULL DEFAULT NULL,
+  dias_estimados_compostagem INT UNSIGNED NULL DEFAULT NULL,
+  PRIMARY KEY (id),
+  INDEX idx_status (status)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS eventos_animais (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  ciclo_id INT UNSIGNED NOT NULL,
+  peso_estimado_kg DECIMAL(7,2) NOT NULL,
+  data_adicao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  CONSTRAINT fk_eventos_ciclo FOREIGN KEY (ciclo_id)
+    REFERENCES ciclos_compostagem (id) ON DELETE CASCADE
+) ENGINE=InnoDB;
